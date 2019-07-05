@@ -5,4 +5,4 @@
 #export SOCKS5_PASSWORD="password"
 #export TELEGRAM_IDS_ALLOWED_ACCESS_SEPARATED_BY_SEMICOLONS="143909428;rem_456;rem_789"
 source ./bot.local.sh
-nodejs ./monitor_bot.js
+node ./monitor_bot.js

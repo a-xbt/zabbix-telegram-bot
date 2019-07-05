@@ -61,7 +61,7 @@ function on_ping(ctx) {
 
 const bot = new Telegraf(process.env.BOT_TOKEN, { telegram: { agent: socksAgent } })
 bot.hears('/start', (ctx) => {if(!accessAllowed(ctx))return;ctx.reply('Welcome! Click /help for help.');})
-bot.help((ctx) => help(ctx))
+bot.hears('/help', (ctx) => help(ctx))
 //bot.on('sticker', (ctx) => ctx.reply('👍'))
 
 bot.hears('ping', (ctx) => on_ping(ctx))
@@ -73,9 +73,10 @@ bot.hears('test bot', (ctx) => test_bot(ctx))
 //bot.command('oldschool', (ctx) => ctx.reply('Hello'))
 //bot.command('modern', ({ reply }) => reply('Yo'))
 //bot.command('hipster', Telegraf.reply('λ'))
-bot.command('check', (ctx) => check(ctx))
-bot.command('test_bot', (ctx) => test_bot(ctx))
-bot.command('ping', (ctx) => on_ping(ctx))
+bot.hears('/check', (ctx) => check(ctx))
+bot.hears('/test_bot', (ctx) => test_bot(ctx))
+bot.hears('/ping', (ctx) => on_ping(ctx))
 bot.launch()
+//bot.startPolling()
 
 console.log("bot started");
