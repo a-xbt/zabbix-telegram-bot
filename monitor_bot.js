@@ -60,7 +60,7 @@ function on_ping(ctx) {
 }
 
 const bot = new Telegraf(process.env.BOT_TOKEN, { telegram: { agent: socksAgent } })
-bot.start((ctx) => {if(!accessAllowed(ctx))return;ctx.reply('Welcome! Click /help for help.');})
+bot.hears('/start', (ctx) => {if(!accessAllowed(ctx))return;ctx.reply('Welcome! Click /help for help.');})
 bot.help((ctx) => help(ctx))
 //bot.on('sticker', (ctx) => ctx.reply('👍'))
 
