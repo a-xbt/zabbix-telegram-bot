@@ -103,7 +103,7 @@ function formatHostGroup(groupId, groupName, callback) {
     function set() {
         console.log("hostGroup "+groupName+" hg.id="+groupId+" hc="+hostCount);
         //var problemCountFormatted=problemCount==0?"ok":""+problemCount+" problems";
-        if(hostCount!=0) {
+        if(true || hostCount!=0) {
             var totalHostCountInGroup=hostCount;
             callback.setString("\""+groupName+"\"    "+hostCountWithoutProblems+"\\"+hostCountWithProblems+"\\"+totalHostCountInGroup+" — "+problemCount);
         } else callback.setString(null);
@@ -148,11 +148,12 @@ function check(ctx) {
         "countOutput": true        
     }, true, { onReply: function(json) { 
         var problemsCount=parseInt(json.result);
-        ctx.reply("total problems: "+problemsCount);
+        ctx.reply("total problem events: "+problemsCount);
     } });
     zabbixApi("hostgroup.get", {
-        "output": ["name","groupid"],
-        "sortfield": "name"
+        "output": ["name","groupid"]
+        //,
+        //"sortfield": "name"
     }, /*use auth*/true, { onReply: function(json) { 
         var list='"имя группы"    машин работает\\проблемных машин\\всего машин — число событий проблем\n\n';
         
