@@ -103,8 +103,7 @@ function formatHostGroup(groupId, groupName, callback) {
     function set() {
         console.log("hostGroup "+groupName+" hg.id="+groupId+" hc="+hostCount);
         //var problemCountFormatted=problemCount==0?"ok":""+problemCount+" problems";
-        var show_groups_with_no_hosts=false;
-        if(show_groups_with_no_hosts || hostCount!=0) {
+        if(true || hostCount!=0) {
             var totalHostCountInGroup=hostCount;
             callback.setString("\""+groupName+"\"    "+hostCountWithoutProblems+"\\"+hostCountWithProblems+"\\"+totalHostCountInGroup+" — "+problemCount);
         } else callback.setString(null);
