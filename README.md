@@ -2,6 +2,7 @@
 
 ## Installation
 
+0. Install nodejs and npm: `sudo apt install npm nodejs`
 1. In this dir, run `npm install telegraf socks5-https-client` 
 2. In this dir, create `bot.local.sh` and specify:
 
