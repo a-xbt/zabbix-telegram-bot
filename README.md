@@ -16,4 +16,4 @@ export TELEGRAM_IDS_ALLOWED_ACCESS_SEPARATED_BY_SEMICOLONS="123;rem_456;rem_789"
 
 ## Running
 
-./monitor_bot.sh
+`./monitor_bot.sh`
