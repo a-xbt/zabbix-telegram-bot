@@ -4,6 +4,10 @@
 
 0. Install nodejs and npm: `sudo apt install npm nodejs`
 1. In this dir, run `npm install telegraf socks5-https-client` 
+
+For Ubuntu 16.04.x: `npm install telegraf@0.6.3 socks5-https-client@1.1.3`
+For Ubuntu 16.04.x: `npm WARN deprecated minimatch@0.3.0: Please update to minimatch 3.0.2 or higher to avoid a RegExp DoS issue`
+
 2. In this dir, create `bot.local.sh` and specify:
 
 ```
