@@ -2,3 +2,4 @@ bot.local.sh
 package-lock.json
 node_modules
 nohup.out
+logs

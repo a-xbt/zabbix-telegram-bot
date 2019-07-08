@@ -1,3 +1,6 @@
+#!/bin/bash
+
+
 #export BOT_TOKEN="x:y"
 #export SOCKS5_HOST="host.com"
 #export SOCKS5_PORT="55555"
@@ -8,4 +11,13 @@
 #export BOT_ZABBIX_USERNAME="username"
 #export BOT_ZABBIX_PASSWORD="password"
 source ./bot.local.sh
-node ./monitor_bot.js
+
+
+while true
+do
+	echo "Press [CTRL+C] to stop... Running nodejs"
+	node ./monitor_bot.js
+	echo sleeping 1 sec...
+	sleep 1
+done
+
