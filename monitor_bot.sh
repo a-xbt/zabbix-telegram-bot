@@ -17,6 +17,7 @@ while true
 do
 	echo "Press [CTRL+C] to stop... Running nodejs"
 	node ./monitor_bot.js
+	echo "nodejs exited, exitcode:" $?
 	echo sleeping 1 sec...
 	sleep 1
 done
