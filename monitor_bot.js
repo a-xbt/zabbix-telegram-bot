@@ -20,6 +20,7 @@ const socksAgent = new SocksAgent({
 });
 
 var TELEGRAM_IDS_ALLOWED_ACCESS=new Set(process.env.TELEGRAM_IDS_ALLOWED_ACCESS_SEPARATED_BY_SEMICOLONS.split(";"));
+var HOST_GROUP_IDS_TO_SKIP=new Set(process.env.HOST_GROUPS_TO_SKIP.split(";"));
 var ZABBIX_API_ENDPOINT_URL=process.env.ZABBIX_API_ENDPOINT_URL;
 var ZABBIX_USERNAME=process.env.BOT_ZABBIX_USERNAME;
 var ZABBIX_PASSWORD=process.env.BOT_ZABBIX_PASSWORD;
@@ -81,6 +82,10 @@ function accessAllowed(ctx) {
     return false;
 }
 
+function skipHostGroup(groupId) {
+    return HOST_GROUP_IDS_TO_SKIP.has(""+groupId);
+}
+
 //callback: {"setString":function(str){...}}
 //if str is null: skip host group
 /*
@@ -91,6 +96,9 @@ function accessAllowed(ctx) {
 сообщение что вышлядело так    "yunchik_sgminer"          415\1\416
 */
 function formatHostGroup(groupId, groupName, callback) {
+    if(skipHostGroup(groupId)){console.log("skipping hg: hgid="+groupId+", hgname="+groupName);callback.setString(null);return;}
+    else console.log("NOT skipping hg: hgid="+groupId+", hgname="+groupName);
+    
     var queriesToPerform=2;
     
     var problemCount=-1;
@@ -106,7 +114,7 @@ function formatHostGroup(groupId, groupName, callback) {
         var show_groups_with_no_hosts=false;
         if(show_groups_with_no_hosts || hostCount!=0) {
             var totalHostCountInGroup=hostCount;
-            callback.setString("\""+groupName+"\"    "+hostCountWithoutProblems+"\\"+hostCountWithProblems+"\\"+totalHostCountInGroup+" — "+problemCount);
+            callback.setString(/*"id= "+groupId+*/"\""+groupName+"\"    "+/*hostCountWithoutProblems+"\\"+hostCountWithProblems+"\\"+*/totalHostCountInGroup+" — "+problemCount);
         } else callback.setString(null);
     }
 
@@ -155,8 +163,8 @@ function check(ctx) {
         "output": ["name","groupid"]
         //,
         //"sortfield": "name"
-    }, /*use auth*/true, { onReply: function(json) { 
-        var list='"имя группы"    машин работает\\проблемных машин\\всего машин — число событий проблем\n\n';
+    }, /*use auth*/true, { onReply: function(json) {
+        var list='"имя группы"    '+/*машин работает\\проблемных машин\\*/'всего машин — число событий проблем\n\n';
         
         var hostGroups=json.result;
         
