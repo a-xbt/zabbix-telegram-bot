@@ -13,9 +13,9 @@
 source ./bot.local.sh
 
 
-export TO=$1
-export SUBJECT=$2
-export MESSAGE=$3
+export TO="$1"
+export SUBJECT="$2"
+export MESSAGE="$3"
  
 echo "Running nodejs"
 node ./send_alert.js
