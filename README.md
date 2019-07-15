@@ -23,4 +23,4 @@ export HOST_GROUPS_TO_SKIP="12;23;34;100"
 
 ## Running
 
-`./monitor_bot.sh`
+`./nohup-run-bot.sh`
