@@ -1,3 +1,9 @@
+var threads_log = require('why-is-node-running')
+setTimeout(function () {
+   console.log("threads log for mon_bot.js");
+   threads_log(); // logs out active handles that are keeping node running
+}, 5*60*1000)
+ 
 /*
 
 monitor bot
@@ -11,13 +17,18 @@ console.log("bot starting");
 
 
 const Telegraf = require('telegraf')
-const SocksAgent = require('socks5-https-client/lib/Agent');
+/*const SocksAgent = require('socks5-https-client/lib/Agent');
 const socksAgent = new SocksAgent({
     socksHost: process.env.SOCKS5_HOST,
     socksPort: process.env.SOCKS5_PORT,
     socksUsername: process.env.SOCKS5_USERNAME,
     socksPassword: process.env.SOCKS5_PASSWORD,
-});
+});*/
+
+const SocksProxyAgent = require('socks-proxy-agent');
+//'socks://user:pass@ip:port'
+const socksAgent = new SocksProxyAgent('socks://'+process.env.SOCKS5_USERNAME+":"+process.env.SOCKS5_PASSWORD+"@"+process.env.SOCKS5_HOST+":"+process.env.SOCKS5_PORT);
+
 
 var TELEGRAM_IDS_ALLOWED_ACCESS=new Set(process.env.TELEGRAM_IDS_ALLOWED_ACCESS_SEPARATED_BY_SEMICOLONS.split(";"));
 var HOST_GROUP_IDS_TO_SKIP=new Set(process.env.HOST_GROUPS_TO_SKIP.split(";"));

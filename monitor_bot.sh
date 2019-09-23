@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 #export BOT_TOKEN="x:y"
 #export SOCKS5_HOST="host.com"
 #export SOCKS5_PORT="55555"
@@ -15,7 +14,10 @@ source ./bot.local.sh
 
 while true
 do
+	echo "iter tg_mon_bot"
+	date
 	echo "Press [CTRL+C] to stop... Running nodejs"
+	
 	node ./monitor_bot.js
 	echo "nodejs exited, exitcode:" $?
 	echo sleeping 1 sec...
