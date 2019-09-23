@@ -1,5 +1,21 @@
 #!/bin/bash
 
+cd /home/toxa/git/telegram_monitor_bot/
+
+echo "whoami: " `whoami`
+echo "pwd: " `pwd`
+echo "dollar0: " "$0"
+echo "NVM_DIR: " "$NVM_DIR"
+echo "dollarHOME: " "$HOME"
+
+echo 1 2 3 : "$1" "$2" "$3"
+
+source $NVM_DIR/nvm.sh
+
+nvm use v8.8.0
+
+#echo nvm ls:
+#nvm ls
 
 #export BOT_TOKEN="x:y"
 #export SOCKS5_HOST="host.com"
@@ -20,4 +36,4 @@ export MESSAGE="$3"
 echo "Running nodejs"
 node ./send_alert.js
 echo "nodejs exited, exitcode:" $?
-
+exit $?

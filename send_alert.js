@@ -1,9 +1,11 @@
 var threads_log = require('why-is-node-running')
-setTimeout(function () {
+
+function dumpThreads() {
    console.log("threads log for send_alert.js");
    threads_log(); // logs out active handles that are keeping node running
-}, 5*60*1000)
+}
 
+var thread_dumps_loop = setTimeout(dumpThreads, 5*60*1000);
 
 
 /*
@@ -54,3 +56,5 @@ function launch_bot() {
 }
 
 launch_bot();
+clearTimeout(thread_dumps_loop);
+dumpThreads();
