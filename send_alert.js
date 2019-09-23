@@ -1,3 +1,11 @@
+var threads_log = require('why-is-node-running')
+setTimeout(function () {
+   console.log("threads log for send_alert.js");
+   threads_log(); // logs out active handles that are keeping node running
+}, 5*60*1000)
+
+
+
 /*
 
 send alert bot
