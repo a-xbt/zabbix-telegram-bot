@@ -8,7 +8,11 @@ echo "dollar0: " "$0"
 echo "NVM_DIR: " "$NVM_DIR"
 echo "dollarHOME: " "$HOME"
 
-echo 1 2 3 : "$1" "$2" "$3"
+#export PARAM1="$1"
+#export PARAM2="$2"
+#export PARAM3="$3"
+
+echo PARAM 1 2 3 : "[${PARAM1}] [${PARAM2}] [${PARAM3}]"
 
 source $NVM_DIR/nvm.sh
 
@@ -29,9 +33,9 @@ nvm use v8.8.0
 source ./bot.local.sh
 
 
-export TO="$1"
-export SUBJECT="$2"
-export MESSAGE="$3"
+export TO="${PARAM1}"
+export SUBJECT="${PARAM2}"
+export MESSAGE="${PARAM3}"
  
 echo "Running nodejs"
 node ./send_alert.js
