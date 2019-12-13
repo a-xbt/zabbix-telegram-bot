@@ -37,7 +37,8 @@ export TO="${PARAM1}"
 export SUBJECT="${PARAM2}"
 export MESSAGE="${PARAM3}"
  
-echo "Running nodejs"
+echo "[enabled] Running nodejs"
+#exit
 node ./send_alert.js
 echo "nodejs exited, exitcode:" $?
 exit $?

@@ -4,3 +4,4 @@ node_modules
 nohup.out
 logs
 send.log
+bot.state.persistent.json

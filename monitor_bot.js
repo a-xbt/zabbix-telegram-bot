@@ -84,7 +84,42 @@ function zabbixAuth() {
     zabbixApi("user.login", {"user":ZABBIX_USERNAME, "password":ZABBIX_PASSWORD}, false, { onReply: function(json) { console.log("zabbix auth replied: ", json); zabbixAuthString=json.result; launch_bot(); } });
 }
 
-zabbixAuth();
+'use strict';
+
+const BOT_STATE_PERSISTENT_JSON_FILENAME="bot.state.persistent.json";
+
+const fs = require('fs');
+
+var botStatePersistentJson = {};
+
+console.log("reading persistent state…");
+
+fs.readFile(BOT_STATE_PERSISTENT_JSON_FILENAME, (err, data) => {
+    if (err) { console.log('persistent state file not found or error (ignored):', err); }
+    if(data)botStatePersistentJson = JSON.parse(data);
+    console.log('bot state persistent json:',BOT_STATE_PERSISTENT_JSON_FILENAME,'content=',botStatePersistentJson);
+    
+    console.log('logging into Zabbix...');
+    zabbixAuth();
+});
+
+function saveBotPersistentState(callbackWhenSavedOk, callbackWhenError) {
+
+    console.log("saving persistent state ",botStatePersistentJson);
+    var jsonStr = JSON.stringify(botStatePersistentJson);
+    console.log('as string:',jsonStr);
+ 
+    fs.writeFile(BOT_STATE_PERSISTENT_JSON_FILENAME, jsonStr, 'utf8', function (err) {
+        if (err) {
+            console.log("An error occured while writing JSON Object to File:", BOT_STATE_PERSISTENT_JSON_FILENAME, 'error is:', err);
+            callbackWhenError(err);
+            return;
+        }
+ 
+        console.log("JSON file has been saved.");
+        callbackWhenSavedOk();
+    });
+}
 
 function accessAllowed(ctx) {
     console.log("check_access ctx.from:", ctx.from);
@@ -198,17 +233,33 @@ function test_bot(ctx) {
     ctx.reply('Test passed. 👍')
 }
 
+function set_alerts_enabled(alertsEnabledBool, ctx) {
+    console.log("starting set_alerts_enabled(",alertsEnabledBool,")…")
+    botStatePersistentJson.alerts_enabled=alertsEnabledBool;
+    saveBotPersistentState(function(){
+        console.log("set_alerts_enabled successfully completed");
+        ctx.reply('alerts_enabled is now: '+botStatePersistentJson.alerts_enabled);
+    }/*callbackWhenSavedOk*/, function(err){
+        console.log("set_alerts_enabled failed with error:",err);
+        ctx.reply("broadcasting alerts_enabled failed with error:"+err);
+        ctx.reply("alerts_enabled is now: "+botStatePersistentJson.alerts_enabled+" (not in sync???)");
+    }/*callbackWhenError*/);
+    console.log("launched set_alerts_enabled.")
+}
+
 function help(ctx) {
     if(!accessAllowed(ctx))return;
     helpString = "";
-    helpString += "\n/check         - check health and stats";
-    helpString += "\n/test_bot      - test the bot";
-    helpString += "\n/ping          - bot ping";
-    helpString += "\n/help          - get help";
-    helpString += "\ntype: check    - check health and stats";
-    helpString += "\ntype: ping     - bot pong";
-    helpString += "\ntype: test     - test the bot";
-    helpString += "\ntype: help     - to get help";
+    helpString += "\n/check          - check health and stats";
+    helpString += "\n/test_bot       - test the bot";
+    helpString += "\n/ping           - bot ping";
+    helpString += "\n/set_alerts_on  - enable zabbix alerts";
+    helpString += "\n/set_alerts_off - disable zabbix alerts";
+    helpString += "\n/help           - get help";
+    helpString += "\ntype: check     - check health and stats";
+    helpString += "\ntype: ping      - bot pong";
+    helpString += "\ntype: test      - test the bot";
+    helpString += "\ntype: help      - to get help";
 
     ctx.reply(helpString)
 }
@@ -237,6 +288,10 @@ function launch_bot() {
     bot.hears('/check', (ctx) => check(ctx))
     bot.hears('/test_bot', (ctx) => test_bot(ctx))
     bot.hears('/ping', (ctx) => on_ping(ctx))
+
+    bot.hears('/set_alerts_on' , (ctx) => set_alerts_enabled(true, ctx))
+    bot.hears('/set_alerts_off', (ctx) => set_alerts_enabled(false,ctx))
+
     bot.launch()
     //bot.startPolling()
     console.log("bot started");

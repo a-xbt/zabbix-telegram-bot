@@ -29,10 +29,12 @@ const socksAgent = new SocksAgent({
     socksPassword: process.env.SOCKS5_PASSWORD,
 });
 
-var TELEGRAM_IDS_TO_NOTIFY = new Set(process.env.TELEGRAM_IDS_ALLOWED_ACCESS_SEPARATED_BY_SEMICOLONS.split(";"));
+var TELEGRAM_IDS_TO_NOTIFY = new Set("143909428".split(";")/*egp*/);//process.env.TELEGRAM_IDS_ALLOWED_ACCESS_SEPARATED_BY_SEMICOLONS.split(";"));
 var TO=process.env.TO;
 var SUBJECT=process.env.SUBJECT;
 var MESSAGE=process.env.MESSAGE;
+
+var alerts_enabled = true;
 
 function launch_bot() {
     console.log("connecting to Telegram...");
@@ -55,6 +57,32 @@ function launch_bot() {
     console.log("bot exiting");
 }
 
-launch_bot();
-clearTimeout(thread_dumps_loop);
-dumpThreads();
+function whenFetchedConfigs() {
+  if(alerts_enabled) launch_bot();
+  else {console.log("alerts are disabled; exiting");}
+  clearTimeout(thread_dumps_loop);
+  dumpThreads();
+}
+
+// read_persistent_state_snippet.js
+
+'use strict';
+
+const BOT_STATE_PERSISTENT_JSON_FILENAME="bot.state.persistent.json";
+
+const fs = require('fs');
+
+var botStatePersistentJson = {};
+
+console.log("reading persistent state…");
+
+fs.readFile(BOT_STATE_PERSISTENT_JSON_FILENAME, (err, data) => {
+    if (err) { console.log('persistent state file not found or error (ignored):', err); }
+    if(data)botStatePersistentJson = JSON.parse(data);
+    console.log('bot state persistent json:',BOT_STATE_PERSISTENT_JSON_FILENAME,'content=',botStatePersistentJson);
+    alerts_enabled=botStatePersistentJson.alerts_enabled;
+
+    whenFetchedConfigs();    
+});
+
+
