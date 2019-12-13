@@ -29,7 +29,7 @@ const socksAgent = new SocksAgent({
     socksPassword: process.env.SOCKS5_PASSWORD,
 });
 
-var TELEGRAM_IDS_TO_NOTIFY = new Set("143909428".split(";")/*egp*/);//process.env.TELEGRAM_IDS_ALLOWED_ACCESS_SEPARATED_BY_SEMICOLONS.split(";"));
+var TELEGRAM_IDS_TO_NOTIFY = new Set(process.env.TELEGRAM_IDS_ALLOWED_ACCESS_SEPARATED_BY_SEMICOLONS.split(";"));
 var TO=process.env.TO;
 var SUBJECT=process.env.SUBJECT;
 var MESSAGE=process.env.MESSAGE;
